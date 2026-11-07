@@ -62,7 +62,10 @@ jobs:
           API_IMAGE: ${{ env.IMAGE_NAME }}:${{ github.sha }}
         run: |
           cp .env.example .env
-          docker compose up -d --wait --wait-timeout 120
+          docker compose up -d --no-build --wait --wait-timeout 120
+
+      - name: Test API health endpoint
+        run: curl -sSf http://localhost:8080/health
 
       - name: Run tests (pytest)
         run: pytest tests/ -v --tb=short
